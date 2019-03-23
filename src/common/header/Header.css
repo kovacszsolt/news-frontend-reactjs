@@ -1,0 +1,11 @@
+.header {
+    padding: 1rem;
+    background-color: var(--color-blue-50);
+    display: flex;
+    justify-content:space-between;
+}
+
+.header__title {
+    color: white;
+    font-weight: bold;
+}
