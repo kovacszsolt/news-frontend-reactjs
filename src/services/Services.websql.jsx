@@ -1,7 +1,16 @@
 class ServicesWebSQL {
-    static getNews = () => {
 
-    }
+    static createDatabase = () => {
+        return new Promise((resolve, reject) => {
+            let db = window.openDatabase('itcrowd', '1.0', 'News Database', 100 * 1024 * 1024);
+            db.transaction(function (tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS news (id,createtime,status,title,url,description,slug,extension,tags)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS tags (id,title)');
+                resolve(db);
+            })
+        })
+    };
+
     static createDatabase = () => {
         return new Promise((resolve, reject) => {
             let db = window.openDatabase('itcrowd', '1.0', 'News Database', 100 * 1024 * 1024);
@@ -18,6 +27,24 @@ class ServicesWebSQL {
                     resolve(results.rows[0]['count']);
                 });
             });
+        });
+    }
+
+    static insertRecord = (tx, record) => {
+        return new Promise((resolve, reject) => {
+            tx.executeSql('INSERT INTO news(id,createtime,status,title,url,description,slug,extension,tags) VALUES (?,?,?,?,?,?,?,?,?)',
+                [record._id, record.createTime, record.status, record.title, record.url, record.description, record.slug, record.extension, record.tags.join(',')], (tx1) => {
+                    resolve(record._id);
+                });
+        });
+    };
+
+    static insertRecordTag = (tx, id, title) => {
+        return new Promise((resolve, reject) => {
+            tx.executeSql('INSERT INTO tags(id,title) VALUES (?,?)',
+                [id, title], (tx1) => {
+                    resolve(id);
+                });
         });
     }
 

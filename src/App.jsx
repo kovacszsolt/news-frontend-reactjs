@@ -6,12 +6,14 @@ import AppCommonHeader from './common/header/Header';
 import AppFront from './front/Front';
 import AppTweet from './tweet/Tweet';
 import AppTag from './tag/Tag';
-import AppNotfound  from './notfound/Notfound';
+import AppNotfound from './notfound/Notfound';
 import AppSearch from './search/Search';
 import {Helmet} from "react-helmet";
+import ServicesRemote from "./services/Services.remote";
+
+import ServicesWebSQL from "./services/Services.websql";
 
 class App extends Component {
-
     db;
 
     constructor(props) {
@@ -22,34 +24,10 @@ class App extends Component {
         this.init();
     }
 
-    createDatabase = () => {
-        return new Promise((resolve, reject) => {
-            let db = window.openDatabase('itcrowd', '1.0', 'News Database', 100 * 1024 * 1024);
-            db.transaction(function (tx) {
-                tx.executeSql('CREATE TABLE IF NOT EXISTS news (id,createtime,status,title,url,description,slug,extension,tags)');
-                tx.executeSql('CREATE TABLE IF NOT EXISTS tags (id,title)');
-                resolve(db);
-            })
-        })
-    };
-
-    getData = () => {
-        return new Promise((resolve, reject) => {
-            fetch('https://itcrowd.hu/backend/list/')
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        resolve(result);
-                    },
-                    (error) => {
-                    }
-                )
-        });
-    };
     insertRecords = (records) => {
         return new Promise((resolve, reject) => {
             this.db.transaction((txmain) => {
-                Promise.all(records.map(record => this.insertRecordWebSQL(txmain, record))).then((insertOk) => {
+                Promise.all(records.map(record => ServicesWebSQL.insertRecord(txmain, record))).then((insertOk) => {
                     resolve(true);
 
                 });
@@ -60,7 +38,7 @@ class App extends Component {
     insertTagRecords = (records) => {
         return new Promise((resolve, reject) => {
             this.db.transaction((txmain) => {
-                Promise.all(records.map(record => this.insertRecordTagWebSQL(txmain, record.id, record.title))).then((insertOk) => {
+                Promise.all(records.map(record => ServicesWebSQL.insertRecordTag(txmain, record.id, record.title))).then((insertOk) => {
                     resolve(true);
 
                 });
@@ -68,31 +46,16 @@ class App extends Component {
         });
     };
 
-    insertRecordWebSQL = (tx, record) => {
-        return new Promise((resolve, reject) => {
-            tx.executeSql('INSERT INTO news(id,createtime,status,title,url,description,slug,extension,tags) VALUES (?,?,?,?,?,?,?,?,?)',
-                [record._id, record.createTime, record.status, record.title, record.url, record.description, record.slug, record.extension, record.tags.join(',')], (tx1) => {
-                    resolve(record._id);
-                });
-        });
-    };
-    insertRecordTagWebSQL = (tx, id, title) => {
-        return new Promise((resolve, reject) => {
-            tx.executeSql('INSERT INTO tags(id,title) VALUES (?,?)',
-                [id, title], (tx1) => {
-                    resolve(id);
-                });
-        });
-    }
-
     init() {
-        this.createDatabase().then((db) => {
+        ServicesWebSQL.createDatabase().then((db) => {
             this.db = db;
             db.transaction((txmain) => {
                 txmain.executeSql('SELECT COUNT(*) AS rowcount FROM news', [], (tx, results) => {
-                    if (parseInt(results.rows[0]['rowcount']) === 0) {
+                    if (parseInt(results.rows[0]['rowcount']) !== 0) {
+                        this.setState({isLoading: false});
+                    } else {
                         const tags = [];
-                        this.getData().then((records) => {
+                        ServicesRemote.getAll().then((records) => {
                             records.forEach((record) => {
                                 record.tags.forEach((tag) => {
                                     tags.push({id: record._id, title: tag});
@@ -103,8 +66,6 @@ class App extends Component {
                             }).catch((e) => {
                             });
                         })
-                    } else {
-                        this.setState({isLoading: false});
                     }
                 });
             });
