@@ -2,7 +2,7 @@ class ServicesWebSQL {
 
     static createDatabase = () => {
         return new Promise((resolve, reject) => {
-            let db = window.openDatabase('itcrowd', '1.0', 'News Database', 100 * 1024 * 1024);
+            let db = window.openDatabase('itcloud', '1.0', 'News Database', 100 * 1024 * 1024);
             db.transaction(function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS news (id,createtime,status,title,url,description,slug,extension,tags)');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS tags (id,title)');
@@ -10,16 +10,17 @@ class ServicesWebSQL {
             })
         })
     };
-
-    static createDatabase = () => {
-        return new Promise((resolve, reject) => {
-            let db = window.openDatabase('itcrowd', '1.0', 'News Database', 100 * 1024 * 1024);
-            db.transaction(function (tx) {
-                tx.executeSql('CREATE TABLE IF NOT EXISTS news (createtime,status,title,url,description,slug,extension)');
-                resolve(db);
+    /*
+        static createDatabase = () => {
+            return new Promise((resolve, reject) => {
+                let db = window.openDatabase('it', '1.0', 'News Database', 100 * 1024 * 1024);
+                db.transaction(function (tx) {
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS news (createtime,status,title,url,description,slug,extension)');
+                    resolve(db);
+                })
             })
-        })
-    };
+        };
+        */
     static getRecordount = (db, startPos) => {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
@@ -33,9 +34,10 @@ class ServicesWebSQL {
     static insertRecord = (tx, record) => {
         return new Promise((resolve, reject) => {
             tx.executeSql('INSERT INTO news(id,createtime,status,title,url,description,slug,extension,tags) VALUES (?,?,?,?,?,?,?,?,?)',
-                [record._id, record.createTime, record.status, record.title, record.url, record.description, record.slug, record.extension, record.tags.join(',')], (tx1) => {
+                [record._id, record.created_at, record.status, record.meta.title, record.meta.url, record.meta.description, record.meta.slug, record.meta.extension, record.tags.join(',')], (tx1) => {
                     resolve(record._id);
                 });
+
         });
     };
 

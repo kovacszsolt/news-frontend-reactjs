@@ -40,7 +40,6 @@ class App extends Component {
             this.db.transaction((txmain) => {
                 Promise.all(records.map(record => ServicesWebSQL.insertRecordTag(txmain, record.id, record.title))).then((insertOk) => {
                     resolve(true);
-
                 });
             });
         });
