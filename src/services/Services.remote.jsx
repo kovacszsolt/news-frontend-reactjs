@@ -1,7 +1,7 @@
 class ServicesRemote {
     static getAll = () => {
         return new Promise((resolve, reject) => {
-            fetch(process.env.REACT_APP_SERVER_LIST_URL)
+            fetch('https://itcrowd.hu/backend/list')
                 .then(res => res.json())
                 .then(
                     (result) => {
