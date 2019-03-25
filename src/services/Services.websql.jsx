@@ -10,17 +10,7 @@ class ServicesWebSQL {
             })
         })
     };
-    /*
-        static createDatabase = () => {
-            return new Promise((resolve, reject) => {
-                let db = window.openDatabase('it', '1.0', 'News Database', 100 * 1024 * 1024);
-                db.transaction(function (tx) {
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS news (createtime,status,title,url,description,slug,extension)');
-                    resolve(db);
-                })
-            })
-        };
-        */
+
     static getRecordount = (db, startPos) => {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {

@@ -12,6 +12,7 @@ import {Helmet} from "react-helmet";
 import ServicesRemote from "./services/Services.remote";
 
 import ServicesWebSQL from "./services/Services.websql";
+import ServicesIndexedDB from "./services/Services.indexeddb";
 
 class App extends Component {
     db;
@@ -71,14 +72,37 @@ class App extends Component {
         });
     };
 
+    initIndexedDB = () => {
+        ServicesIndexedDB.createDatabase().then((db) => {
+            this.db = db;
+            ServicesIndexedDB.getRecordount(db).then((recordCount) => {
+                if (recordCount === 0) {
+                    ServicesRemote.getAll().then((records) => {
+                        const transList = this.db.transaction('news', 'readwrite');
+                        const storeObject = transList.objectStore('news');
+                        records.map(record => record.slug = (record.meta === undefined ? '' : record.meta.slug));
+                        records = records.filter(record => record.slug !== '');
+                        records.map(record => record.title = record.meta.title);
+                        records.map(record => record.description = record.meta.description);
+                        records.map(record => record.extension = record.meta.extension);
+                        records.map(record => record.createtime = record.meta.createtime);
+                        Promise.all(records.map(record => ServicesIndexedDB.insertRecord(storeObject, record))).then((qq) => {
+                            this.setState({isLoading: false});
+                        });
+                    });
+                } else {
+                    this.setState({isLoading: false});
+                }
+            });
+        });
+    };
+
     init() {
         if (window.openDatabase === undefined) {
-            console.log('indexeddb');
+            this.initIndexedDB();
         } else {
-            console.log('websql');
             this.initWebSQL();
         }
-
     }
 
     render() {

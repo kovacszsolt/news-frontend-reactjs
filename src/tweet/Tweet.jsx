@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import './Tweet.css';
 import {Helmet} from "react-helmet";
 import ServicesWebSQL from "../services/Services.websql";
+import ServicesIndexedDB from "../services/Services.indexeddb";
 
 class AppTweet extends Component {
     db;
@@ -14,17 +15,49 @@ class AppTweet extends Component {
     }
 
     componentDidMount() {
-        ServicesWebSQL.createDatabase().then((db) => {
+        if (window.openDatabase === undefined) {
+            this.initIndexedDB();
+        } else {
+            this.initWebSQL();
+        }
+    };
+
+    initIndexedDB = () => {
+        ServicesIndexedDB.createDatabase().then((db) => {
             this.db = db;
             this.readData(this.props.match.params.slug);
         });
     };
+
+    initWebSQL = () => {
+        ServicesWebSQL.createDatabase().then((db) => {
+            this.db = db;
+            this.readData(this.props.match.params.slug);
+        });
+    }
 
     componentWillReceiveProps(nextProps) {
         this.readData(nextProps.match.params.slug);
     }
 
     readData(slug) {
+        if (window.openDatabase === undefined) {
+            this.readDataIndexedDB(slug);
+        } else {
+            this.readDataWebSQL(slug);
+        }
+
+    }
+
+    readDataIndexedDB(slug) {
+        const transList = this.db.transaction('news', 'readwrite');
+        const storeObject = transList.objectStore('news');
+        ServicesIndexedDB.getRecordSlug(storeObject, slug).then((record) => {
+            this.setState({tweet: record})
+        });
+    }
+
+    readDataWebSQL(slug) {
         ServicesWebSQL.getRecordSlug(this.db, slug).then((record) => {
             this.setState({tweet: record})
         });
