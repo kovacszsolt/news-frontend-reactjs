@@ -15,8 +15,13 @@ class AppSearch extends Component {
     };
 
     highlightText = (name, query) => {
-        var regex = new RegExp("(" + query + ")", "gi");
-        return name.replace(regex, "<mark>$1</mark>");
+        if (name !== null) {
+            var regex = new RegExp("(" + query + ")", "gi");
+            return name.replace(regex, "<mark>$1</mark>");
+        } else {
+            return name;
+        }
+
     };
 
 
