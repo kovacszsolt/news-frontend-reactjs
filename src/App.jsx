@@ -24,7 +24,7 @@ class App extends Component {
         this.init();
     }
 
-    insertRecords = (records) => {
+    insertWebSQLRecords = (records) => {
         return new Promise((resolve, reject) => {
             this.db.transaction((txmain) => {
                 Promise.all(records.map(record => ServicesWebSQL.insertRecord(txmain, record))).then((insertOk) => {
@@ -35,7 +35,7 @@ class App extends Component {
         });
     };
 
-    insertTagRecords = (records) => {
+    insertWebSQLTagRecords = (records) => {
         return new Promise((resolve, reject) => {
             this.db.transaction((txmain) => {
                 Promise.all(records.map(record => ServicesWebSQL.insertRecordTag(txmain, record.id, record.title))).then((insertOk) => {
@@ -45,7 +45,7 @@ class App extends Component {
         });
     };
 
-    init() {
+    initWebSQL = () => {
         ServicesWebSQL.createDatabase().then((db) => {
             this.db = db;
             db.transaction((txmain) => {
@@ -60,7 +60,7 @@ class App extends Component {
                                     tags.push({id: record._id, title: tag});
                                 });
                             });
-                            Promise.all([this.insertTagRecords(tags), this.insertRecords(records)]).then(() => {
+                            Promise.all([this.insertWebSQLTagRecords(tags), this.insertWebSQLRecords(records)]).then(() => {
                                 this.setState({isLoading: false});
                             }).catch((e) => {
                             });
@@ -69,6 +69,16 @@ class App extends Component {
                 });
             });
         });
+    };
+
+    init() {
+        if (window.openDatabase === undefined) {
+            console.log('indexeddb');
+        } else {
+            console.log('websql');
+            this.initWebSQL();
+        }
+
     }
 
     render() {
