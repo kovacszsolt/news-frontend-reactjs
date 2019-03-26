@@ -3,6 +3,7 @@ import './Tweet.css';
 import {Helmet} from "react-helmet";
 import ServicesWebSQL from "../services/Services.websql";
 import ServicesIndexedDB from "../services/Services.indexeddb";
+import Util from "../Util";
 
 class AppTweet extends Component {
     db;
@@ -15,10 +16,10 @@ class AppTweet extends Component {
     }
 
     componentDidMount() {
-        if (window.openDatabase === undefined) {
-            this.initIndexedDB();
-        } else {
+        if (Util.isWebSQL()) {
             this.initWebSQL();
+        } else {
+            this.initIndexedDB();
         }
     };
 
@@ -41,10 +42,10 @@ class AppTweet extends Component {
     }
 
     readData(slug) {
-        if (window.openDatabase === undefined) {
-            this.readDataIndexedDB(slug);
-        } else {
+        if (Util.isWebSQL()) {
             this.readDataWebSQL(slug);
+        } else {
+            this.readDataIndexedDB(slug);
         }
 
     }

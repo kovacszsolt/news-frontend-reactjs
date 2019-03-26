@@ -3,6 +3,7 @@ import AppCommonCard from '../common/card/Card';
 import './Front.css';
 import ServicesWebSQL from "../services/Services.websql";
 import ServicesIndexedDB from "../services/Services.indexeddb";
+import Util from "../Util";
 
 class AppFront extends Component {
     currentPage = 1;
@@ -17,11 +18,10 @@ class AppFront extends Component {
     };
 
     componentDidMount() {
-        if (window.openDatabase === undefined) {
-            this.initIndexedDB();
-        } else {
-            console.log('websql');
+        if (Util.isWebSQL()) {
             this.initWebSQL();
+        } else {
+            this.initIndexedDB();
         }
     };
 
@@ -54,10 +54,10 @@ class AppFront extends Component {
 
     readData = () => {
         this.componentWillUnmount();
-        if (window.openDatabase === undefined) {
-            this.readDataIndexedDB();
-        } else {
+        if (Util.isWebSQL()) {
             this.readDataWebSQL();
+        } else {
+            this.readDataIndexedDB();
         }
     };
 
@@ -85,14 +85,6 @@ class AppFront extends Component {
         });
     };
 
-    getTags = (tags) => {
-        if (Array.isArray(tags)) {
-            return tags;
-        } else {
-            return tags.split(',');
-        }
-    }
-
     render() {
         return (
             <div className="front__content" id={"content"}>
@@ -102,7 +94,7 @@ class AppFront extends Component {
                                        slug={record.slug}
                                        extension={record.extension}
                                        date={record.createtime}
-                                       tags={this.getTags(record.tags)} text={record.description}></AppCommonCard>
+                                       tags={Util.getTags(record.tags)} text={record.description}></AppCommonCard>
                     )
                 })
                 }

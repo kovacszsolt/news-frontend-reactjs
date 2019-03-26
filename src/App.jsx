@@ -13,6 +13,7 @@ import ServicesRemote from "./services/Services.remote";
 
 import ServicesWebSQL from "./services/Services.websql";
 import ServicesIndexedDB from "./services/Services.indexeddb";
+import Util from "./Util";
 
 class App extends Component {
     db;
@@ -80,13 +81,27 @@ class App extends Component {
                     ServicesRemote.getAll().then((records) => {
                         const transList = this.db.transaction('news', 'readwrite');
                         const storeObject = transList.objectStore('news');
+                        const transTagList = this.db.transaction('tags', 'readwrite');
+                        const storeTagObject = transTagList.objectStore('tags');
                         records.map(record => record.slug = (record.meta === undefined ? '' : record.meta.slug));
                         records = records.filter(record => record.slug !== '');
                         records.map(record => record.title = record.meta.title);
                         records.map(record => record.description = record.meta.description);
                         records.map(record => record.extension = record.meta.extension);
                         records.map(record => record.createtime = record.meta.createtime);
-                        Promise.all(records.map(record => ServicesIndexedDB.insertRecord(storeObject, record))).then((qq) => {
+
+                        const tagRecords = [];
+                        records.forEach((record) => {
+                            record.tags.forEach((tag) => {
+                                const _record = {...record};
+                                _record.tag = tag;
+                                tagRecords.push(_record);
+                            });
+                        });
+                        Promise.all(records.map(record => ServicesIndexedDB.insertRecord(storeObject, record))).then(() => {
+                            this.setState({isLoading: false});
+                        });
+                        Promise.all(tagRecords.map(tagRecord => ServicesIndexedDB.insertRecord(storeTagObject, tagRecord))).then(() => {
                             this.setState({isLoading: false});
                         });
                     });
@@ -98,10 +113,10 @@ class App extends Component {
     };
 
     init() {
-        if (window.openDatabase === undefined) {
-            this.initIndexedDB();
-        } else {
+        if (Util.isWebSQL()) {
             this.initWebSQL();
+        } else {
+            this.initIndexedDB();
         }
     }
 
