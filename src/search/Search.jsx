@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './Search.css';
 import ServicesWebSQL from "../services/Services.websql";
 import {Link} from "react-router-dom";
+import Util from "../Util";
+import ServicesIndexedDB from "../services/Services.indexeddb";
 
 class AppSearch extends Component {
     db;
@@ -24,8 +26,7 @@ class AppSearch extends Component {
 
     };
 
-
-    componentDidMount() {
+    initWebSQL = () => {
         ServicesWebSQL.createDatabase().then((db) => {
             this.db = db;
             if (this.props.match.params.slug !== undefined) {
@@ -33,6 +34,26 @@ class AppSearch extends Component {
                 this.search(this.props.match.params.slug);
             }
         });
+    }
+
+    initIndexedDB = () => {
+        ServicesIndexedDB.createDatabase().then((db) => {
+            this.db = db;
+            if (this.props.match.params.slug !== undefined) {
+                this.setState({searchText: this.props.match.params.slug});
+                this.search(this.props.match.params.slug);
+            }
+        });
+    }
+
+    componentDidMount() {
+        if (Util.isWebSQL()) {
+            this.initWebSQL();
+        } else {
+            this.initIndexedDB();
+        }
+
+
     };
 
     handleChange = (event) => {
@@ -40,16 +61,38 @@ class AppSearch extends Component {
         this.search(event.target.value);
     }
 
+    searchIndexedDB = (searchText) => {
+        const transList = this.db.transaction('news', 'readwrite');
+        const storeObject = transList.objectStore('news');
+        ServicesIndexedDB.search(storeObject, searchText).then((records) => {
+            this.setState({tweets: records});
+        });
+    }
+
     search = (searchText) => {
         if (searchText.length > 2) {
+            if (Util.isWebSQL()) {
+                this.searchWebSQL(searchText);
+            } else {
+                this.searchIndexedDB(searchText);
+            }
+            window.history.pushState({}, "another page", '/search/' + searchText);
+            /*
             ServicesWebSQL.findTitle(this.db, searchText).then((records) => {
                 window.history.pushState({}, "another page", '/search/' + searchText);
                 this.setState({tweets: records});
             });
+             */
         } else {
             this.setState({tweets: []});
         }
     };
+
+    searchWebSQL = (searchText) => {
+        ServicesWebSQL.findTitle(this.db, searchText).then((records) => {
+            this.setState({tweets: records});
+        });
+    }
 
     render() {
         return (
@@ -71,7 +114,7 @@ class AppSearch extends Component {
                                         className="search__list__item-description"
                                         dangerouslySetInnerHTML={{__html: this.highlightText(record.description, this.state.searchText)}}></div>
                                     <div className="common__tags padding__left-05">
-                                        {record.tags.split(',').map((tag) => {
+                                        {Util.getTags(record.tags).map((tag) => {
                                             return (
                                                 <Link key={tag} to={`/tag/${tag}`}>{tag}</Link>
                                             )
