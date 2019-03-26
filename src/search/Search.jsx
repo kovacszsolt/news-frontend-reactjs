@@ -77,19 +77,13 @@ class AppSearch extends Component {
                 this.searchIndexedDB(searchText);
             }
             window.history.pushState({}, "another page", '/search/' + searchText);
-            /*
-            ServicesWebSQL.findTitle(this.db, searchText).then((records) => {
-                window.history.pushState({}, "another page", '/search/' + searchText);
-                this.setState({tweets: records});
-            });
-             */
         } else {
             this.setState({tweets: []});
         }
     };
 
     searchWebSQL = (searchText) => {
-        ServicesWebSQL.findTitle(this.db, searchText).then((records) => {
+        ServicesWebSQL.search(this.db, searchText).then((records) => {
             this.setState({tweets: records});
         });
     }

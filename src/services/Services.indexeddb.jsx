@@ -93,9 +93,11 @@ class ServicesIndexedDB {
             storeObject.getAll().onsuccess = (getAllResult) => {
                 if (getAllResult.type === 'success') {
                     const records = getAllResult.target.result.filter((record) => {
+                        let result;
                         if (record.title.toUpperCase().includes(text.toUpperCase()) || (record.description === null ? '' : record.description.toUpperCase().includes(text.toUpperCase()))) {
-                            return record;
+                            result = record;
                         }
+                        return result;
                     });
                     resolve(records);
                 }

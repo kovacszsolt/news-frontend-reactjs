@@ -70,7 +70,7 @@ class ServicesWebSQL {
         });
     }
 
-    static findTitle = (db, text) => {
+    static search = (db, text) => {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
                 tx.executeSql('SELECT rowid,* FROM news WHERE title LIKE "%' + text + '%" OR description LIKE "%' + text + '%"', [], (tx, results) => {
