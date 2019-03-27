@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import AppCommonCard from '../common/card/Card';
 import './Front.css';
 import ServicesWebSQL from "../services/Services.websql";
 import ServicesIndexedDB from "../services/Services.indexeddb";
 import Util from "../Util";
+import {Helmet} from "react-helmet";
 
 class AppFront extends Component {
     currentPage = 1;
@@ -87,18 +88,31 @@ class AppFront extends Component {
 
     render() {
         return (
-            <div className="front__content" id={"content"}>
-                {this.state.tweets.map((record) => {
-                    return (
-                        <AppCommonCard id={record.rowid} key={record.id} title={record.title}
-                                       slug={record.slug}
-                                       extension={record.extension}
-                                       date={record.createtime}
-                                       tags={Util.getTags(record.tags)} text={record.description}></AppCommonCard>
-                    )
-                })
-                }
-            </div>
+            <Fragment>
+                <Helmet>
+                    <title>{process.env.REACT_APP_META_FRONT_TITLE}</title>
+                    <meta name="description" content={process.env.REACT_APP_META_FRONT_DESCRIPTION} />
+                    <meta property="og:url"
+                          content={window.location.href}/>
+                    <meta property="og:type" content="article"/>
+                    <meta property="og:title" content={process.env.REACT_APP_META_FRONT_TITLE} />
+                    <meta property="og:description" content={process.env.REACT_APP_META_FRONT_DESCRIPTION} />
+                    <meta property="og:image"
+                          content= {process.env.REACT_APP_META_FRONT_IMAGE}/>
+                </Helmet>
+                <div className="front__content" id={"content"}>
+                    {this.state.tweets.map((record) => {
+                        return (
+                            <AppCommonCard id={record.rowid} key={record.id} title={record.title}
+                                           slug={record.slug}
+                                           extension={record.extension}
+                                           date={record.createtime}
+                                           tags={Util.getTags(record.tags)} text={record.description}></AppCommonCard>
+                        )
+                    })
+                    }
+                </div>
+            </Fragment>
         );
     };
 }

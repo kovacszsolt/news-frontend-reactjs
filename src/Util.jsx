@@ -1,13 +1,13 @@
 class Util {
     static isWebSQL = () => {
-        //return false;
-
+        return false;
+/*
         if (window.openDatabase === undefined) {
             return false;
         } else {
             return true;
         }
-
+*/
     }
 
     static getTags = (tags) => {

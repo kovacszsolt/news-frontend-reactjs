@@ -88,7 +88,7 @@ class AppTweet extends Component {
                         <h1>{this.state.tweet.title}</h1>
                         <p>{this.state.tweet.description}</p>
                         <div className="tweet__link">
-                            <a href={this.state.tweet.url} target="_blank" rel="noopener noreferrer">Open Content <span
+                            <a href={this.state.tweet.meta.url} target="_blank" rel="noopener noreferrer">Open Content <span
                                 className="fas fa-angle-double-right"></span></a>
                         </div>
                     </div>
