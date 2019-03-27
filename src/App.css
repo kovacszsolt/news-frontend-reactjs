@@ -21,15 +21,6 @@ a {
     text-decoration: none;
 }
 
-/*
-.tags a {
-    border-bottom: 1px solid var(--color-blue-10);
-    font-size: 0.8rem;
-    margin-right: 1rem;
-
-}
-*/
-
 
 .common__tags a {
     color: var(--color-blue-50);
@@ -45,3 +36,35 @@ a {
     padding-left: 2rem !important;
 }
 
+
+.app__overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    visibility: visible;
+    opacity: 1;
+}
+
+.app__overlay__popup {
+    padding: 1rem;
+    margin: auto;
+    background: #fff;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+}
+
+.app__overlay__popup__footer {
+    text-align: right;
+}
+
+.app__overlay__popup__footer button {
+    padding: 0.5rem;
+    border: 0.2rem solid var(--color-blue-50);
+    color: var(--color-blue-70);
+    text-transform: uppercase;
+    font-weight: 700;
+}
