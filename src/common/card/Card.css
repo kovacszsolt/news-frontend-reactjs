@@ -1,5 +1,5 @@
 .common__card {
-    border: 1px solid var(--color-blue-20);
+    border: 1px solid var(--card-border-color);
     display: grid;
     grid-template-rows: auto;
     grid-gap: 1rem;

@@ -19,6 +19,6 @@
 
 .tweet__link a {
     padding: 1rem;
-    background-color: var(--color-blue-70);
+    background-color: var(--tweet-a);
     color: white;
 }

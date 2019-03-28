@@ -1,0 +1,19 @@
+:root {
+    --card-border-color: var(--color-blue-20);
+
+    --common-a-color: var(--color-blue-50);
+    --common-a-border-color: var(--color-blue-50);
+
+    --popup-footer-button-color: var(--color-blue-70);
+    --popup-footer-button-border-color: var(--color-blue-50);
+
+    --tweet-a: var(--color-blue-70);
+
+    --tag-button-color: var(--color-blue-70);
+
+    --header-background-color: var(--color-blue-50);
+
+    --search-header-input-border-color: var(--color-blue-70);
+    --search-list-item-border-color:  var(--color-blue-70);
+    --search-list-item-title-color:  var(--color-blue-50);
+}

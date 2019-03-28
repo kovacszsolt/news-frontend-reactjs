@@ -11,8 +11,9 @@
     .search__notfound img {
         width: 100% !important;
     }
+
     .search__list__item-description {
-        display: none!important;
+        display: none !important;
     }
 }
 
@@ -32,7 +33,7 @@
     padding-left: 0.5rem;
     font-size: 1rem;
     border: none;
-    border-bottom: 1px solid var(--color-blue-70);
+    border-bottom: 1px solid var(--search-header-input-border-color);
 }
 
 .search__header input:focus {
@@ -52,7 +53,7 @@
 }
 
 .search__list__item {
-    border-left: 1px solid var(--color-blue-70);
+    border-left: 1px solid var(--search-list-item-border-color);
     padding-left: 0.5rem;
 }
 
@@ -60,7 +61,7 @@
 .search__list__item-title {
     font-weight: 700;
     padding-bottom: 0.5rem;
-    color: var(--color-blue-50);
+    color: var(--search-list-item-title-color);
 }
 
 

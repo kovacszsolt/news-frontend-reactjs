@@ -32,7 +32,7 @@
 }
 
 .front__bottom button {
-    color: var(--color-blue-70);
+    color: var(--tag-button-color);
     font-size: 2rem;
     background-color: transparent;
     border: none;
