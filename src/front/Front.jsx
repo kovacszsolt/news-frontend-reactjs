@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import AppCommonCard from '../common/card/Card';
 import './Front.css';
-import ServicesWebSQL from "../services/Services.websql";
 import ServicesIndexedDB from "../services/Services.indexeddb";
 import Util from "../Util";
 import {Helmet} from "react-helmet";
@@ -19,11 +18,7 @@ class AppFront extends Component {
     };
 
     componentDidMount() {
-        if (Util.isWebSQL()) {
-            this.initWebSQL();
-        } else {
-            this.initIndexedDB();
-        }
+        this.initIndexedDB();
     };
 
     initIndexedDB = () => {
@@ -32,13 +27,6 @@ class AppFront extends Component {
             this.readData();
         });
     };
-
-    initWebSQL = () => {
-        ServicesWebSQL.createDatabase().then((db) => {
-            this.db = db;
-            this.readData();
-        });
-    }
 
     componentWillUnmount() {
         document.removeEventListener('scroll', this.trackScrolling);
@@ -55,11 +43,7 @@ class AppFront extends Component {
 
     readData = () => {
         this.componentWillUnmount();
-        if (Util.isWebSQL()) {
-            this.readDataWebSQL();
-        } else {
-            this.readDataIndexedDB();
-        }
+        this.readDataIndexedDB();
     };
 
     readDataIndexedDB = () => {
@@ -74,36 +58,24 @@ class AppFront extends Component {
         });
     };
 
-
-    readDataWebSQL = () => {
-        this.componentWillUnmount();
-        ServicesWebSQL.getRecordPage(this.db, this.currentPage * this.state.pagesize).then((records) => {
-            const tmp = this.state.tweets;
-            tmp.push(...records);
-            this.setState({tweets: tmp});
-            this.currentPage++;
-            document.addEventListener('scroll', this.trackScrolling);
-        });
-    };
-
     render() {
         return (
             <Fragment>
                 <Helmet>
                     <title>{process.env.REACT_APP_META_FRONT_TITLE}</title>
-                    <meta name="description" content={process.env.REACT_APP_META_FRONT_DESCRIPTION} />
+                    <meta name="description" content={process.env.REACT_APP_META_FRONT_DESCRIPTION}/>
                     <meta property="og:url"
                           content={window.location.href}/>
                     <meta property="og:type" content="article"/>
-                    <meta property="og:title" content={process.env.REACT_APP_META_FRONT_TITLE} />
-                    <meta property="og:description" content={process.env.REACT_APP_META_FRONT_DESCRIPTION} />
+                    <meta property="og:title" content={process.env.REACT_APP_META_FRONT_TITLE}/>
+                    <meta property="og:description" content={process.env.REACT_APP_META_FRONT_DESCRIPTION}/>
                     <meta property="og:image"
-                          content= {process.env.REACT_APP_META_FRONT_IMAGE}/>
+                          content={process.env.REACT_APP_META_FRONT_IMAGE}/>
                 </Helmet>
                 <div className="front__content" id={"content"}>
                     {this.state.tweets.map((record) => {
                         return (
-                            <AppCommonCard id={record.rowid} key={record.id} title={record.title}
+                            <AppCommonCard id={record.id} key={record.id} title={record.title}
                                            slug={record.slug}
                                            extension={record.extension}
                                            date={record.createtime}

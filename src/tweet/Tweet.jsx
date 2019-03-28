@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import './Tweet.css';
 import {Helmet} from "react-helmet";
-import ServicesWebSQL from "../services/Services.websql";
 import ServicesIndexedDB from "../services/Services.indexeddb";
 import Util from "../Util";
 
@@ -16,11 +15,9 @@ class AppTweet extends Component {
     }
 
     componentDidMount() {
-        if (Util.isWebSQL()) {
-            this.initWebSQL();
-        } else {
-            this.initIndexedDB();
-        }
+
+        this.initIndexedDB();
+
     };
 
     initIndexedDB = () => {
@@ -30,24 +27,13 @@ class AppTweet extends Component {
         });
     };
 
-    initWebSQL = () => {
-        ServicesWebSQL.createDatabase().then((db) => {
-            this.db = db;
-            this.readData(this.props.match.params.slug);
-        });
-    }
 
     componentWillReceiveProps(nextProps) {
         this.readData(nextProps.match.params.slug);
     }
 
     readData(slug) {
-        if (Util.isWebSQL()) {
-            this.readDataWebSQL(slug);
-        } else {
-            this.readDataIndexedDB(slug);
-        }
-
+        this.readDataIndexedDB(slug);
     }
 
     readDataIndexedDB(slug) {
@@ -58,11 +44,6 @@ class AppTweet extends Component {
         });
     }
 
-    readDataWebSQL(slug) {
-        ServicesWebSQL.getRecordSlug(this.db, slug).then((record) => {
-            this.setState({tweet: record})
-        });
-    }
 
     render() {
         if (this.state.tweet === null) {
@@ -88,8 +69,9 @@ class AppTweet extends Component {
                         <h1>{this.state.tweet.title}</h1>
                         <p>{this.state.tweet.description}</p>
                         <div className="tweet__link">
-                            <a href={this.state.tweet.meta.url} target="_blank" rel="noopener noreferrer">Open Content <span
-                                className="fas fa-angle-double-right"></span></a>
+                            <a href={this.state.tweet.meta.url} target="_blank" rel="noopener noreferrer">Open
+                                Content <span
+                                    className="fas fa-angle-double-right"></span></a>
                         </div>
                     </div>
                 </Fragment>

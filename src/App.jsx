@@ -10,8 +10,6 @@ import AppNotfound from './notfound/Notfound';
 import AppSearch from './search/Search';
 import {Helmet} from "react-helmet";
 import ServicesRemote from "./services/Services.remote";
-
-import ServicesWebSQL from "./services/Services.websql";
 import ServicesIndexedDB from "./services/Services.indexeddb";
 import Util from "./Util";
 
@@ -26,53 +24,6 @@ class App extends Component {
         };
         this.init();
     }
-
-    insertWebSQLRecords = (records) => {
-        return new Promise((resolve, reject) => {
-            this.db.transaction((txmain) => {
-                Promise.all(records.map(record => ServicesWebSQL.insertRecord(txmain, record))).then((insertOk) => {
-                    resolve(true);
-
-                });
-            });
-        });
-    };
-
-    insertWebSQLTagRecords = (records) => {
-        return new Promise((resolve, reject) => {
-            this.db.transaction((txmain) => {
-                Promise.all(records.map(record => ServicesWebSQL.insertRecordTag(txmain, record.id, record.title))).then((insertOk) => {
-                    resolve(true);
-                });
-            });
-        });
-    };
-
-    initWebSQL = () => {
-        ServicesWebSQL.createDatabase().then((db) => {
-            this.db = db;
-            db.transaction((txmain) => {
-                txmain.executeSql('SELECT COUNT(*) AS rowcount FROM news', [], (tx, results) => {
-                    if (parseInt(results.rows[0]['rowcount']) !== 0) {
-                        this.setState({isLoading: false});
-                    } else {
-                        const tags = [];
-                        ServicesRemote.getAll().then((records) => {
-                            records.forEach((record) => {
-                                record.tags.forEach((tag) => {
-                                    tags.push({id: record._id, title: tag});
-                                });
-                            });
-                            Promise.all([this.insertWebSQLTagRecords(tags), this.insertWebSQLRecords(records)]).then(() => {
-                                this.setState({isLoading: false});
-                            }).catch((e) => {
-                            });
-                        })
-                    }
-                });
-            });
-        });
-    };
 
     initIndexedDB = () => {
         ServicesIndexedDB.createDatabase().then((db) => {
@@ -124,11 +75,7 @@ class App extends Component {
     }
 
     init() {
-        if (Util.isWebSQL()) {
-            this.initWebSQL();
-        } else {
-            this.initIndexedDB();
-        }
+        this.initIndexedDB();
     }
 
     addCookie = () => {
@@ -165,7 +112,7 @@ class App extends Component {
                                 </div>
                             </div>
                         </div>
-                        : ''}}
+                        : ''}
                     <Router>
                         <Fragment>
                             <AppCommonHeader/>

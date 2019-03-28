@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './Search.css';
-import ServicesWebSQL from "../services/Services.websql";
 import {Link} from "react-router-dom";
 import Util from "../Util";
 import ServicesIndexedDB from "../services/Services.indexeddb";
@@ -18,23 +17,13 @@ class AppSearch extends Component {
 
     highlightText = (name, query) => {
         if (name !== null) {
-            var regex = new RegExp("(" + query + ")", "gi");
+            const regex = new RegExp("(" + query + ")", "gi");
             return name.replace(regex, "<mark>$1</mark>");
         } else {
             return name;
         }
 
     };
-
-    initWebSQL = () => {
-        ServicesWebSQL.createDatabase().then((db) => {
-            this.db = db;
-            if (this.props.match.params.slug !== undefined) {
-                this.setState({searchText: this.props.match.params.slug});
-                this.search(this.props.match.params.slug);
-            }
-        });
-    }
 
     initIndexedDB = () => {
         ServicesIndexedDB.createDatabase().then((db) => {
@@ -47,13 +36,7 @@ class AppSearch extends Component {
     }
 
     componentDidMount() {
-        if (Util.isWebSQL()) {
-            this.initWebSQL();
-        } else {
             this.initIndexedDB();
-        }
-
-
     };
 
     handleChange = (event) => {
@@ -81,12 +64,6 @@ class AppSearch extends Component {
             this.setState({tweets: []});
         }
     };
-
-    searchWebSQL = (searchText) => {
-        ServicesWebSQL.search(this.db, searchText).then((records) => {
-            this.setState({tweets: records});
-        });
-    }
 
     render() {
         return (

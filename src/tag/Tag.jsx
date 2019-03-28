@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import AppCommonCard from '../common/card/Card';
 import './Tag.css';
-import ServicesWebSQL from "../services/Services.websql";
 import Util from "../Util";
 import ServicesIndexedDB from "../services/Services.indexeddb";
 
@@ -17,36 +16,19 @@ class AppFront extends Component {
     };
 
     componentDidMount() {
-        if (Util.isWebSQL()) {
-            this.initWebSQL();
-        } else {
-            this.initIndexedDB();
-        }
+        this.initIndexedDB();
+
     };
 
     componentWillReceiveProps = (nextProps) => {
         this.readData(nextProps.match.params.slug);
     }
 
-    readDataWebSQL = (tag) => {
-        ServicesWebSQL.getRecordTag(this.db, tag).then((records) => {
-            this.setState({tweets: records});
-        });
-    };
-
     readDataIndexedDB = (tag) => {
         const transList = this.db.transaction('tags', 'readwrite');
         const storeObject = transList.objectStore('tags');
         ServicesIndexedDB.getRecordTag(storeObject, tag).then((records) => {
             this.setState({tweets: records});
-        });
-    }
-
-
-    initWebSQL = () => {
-        ServicesWebSQL.createDatabase().then((db) => {
-            this.db = db;
-            this.readDataWebSQL(this.props.match.params.slug);
         });
     }
 
@@ -59,11 +41,8 @@ class AppFront extends Component {
 
 
     readData = (tag) => {
-        if (Util.isWebSQL()) {
-            this.readDataWebSQL(tag);
-        } else {
-            this.readDataIndexedDB(tag);
-        }
+        this.readDataIndexedDB(tag);
+
     };
 
     render() {
