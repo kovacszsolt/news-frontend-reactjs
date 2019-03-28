@@ -2,8 +2,18 @@ cache:
   paths:
     - build/
 stages:
+  - build
   - release
   - deploy
+
+build:
+  image: node:latest
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  only:
+    - master
 
 create:
   image: docker:latest
@@ -12,13 +22,25 @@ create:
     - docker:dind
   variables:
     DOCKER_DRIVER: overlay
-    CI_REGISTRY: registry.gitlab.com
   before_script:
     - docker info
   script:
     - ls -l
     - echo $CI_PROJECT_DIR
     - echo $CI_PROJECT_NAME
-    - echo "${CI_REGISTRY_IMAGE}:latest"
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build --pull -t "${CI_REGISTRY_IMAGE}:latest" .
+    - docker push "${CI_REGISTRY_IMAGE}:latest"
+  only:
+    - master
+
+deploy:
+  image: alpine:latest
+  stage: deploy
+  script:
+    - apk add --update --no-cache openssh sshpass
+    - sshpass -V
+    - export SSHPASS=$DEPLOY_REMOTE_PASSWORD
+    - sshpass -e ssh -oStrictHostKeyChecking=no $DEPLOY_REMOTE_USERNAME@$DEPLOY_REMOTE_HOST '$DEPLOY_REMOTE_SCRIPT'
   only:
     - master
