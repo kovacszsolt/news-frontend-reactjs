@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react';
 import './Tweet.css';
 import {Helmet} from "react-helmet";
 import ServicesIndexedDB from "../services/Services.indexeddb";
-import Util from "../Util";
 
 class AppTweet extends Component {
     db;

@@ -11,7 +11,6 @@ import AppSearch from './search/Search';
 import {Helmet} from "react-helmet";
 import ServicesRemote from "./services/Services.remote";
 import ServicesIndexedDB from "./services/Services.indexeddb";
-import Util from "./Util";
 
 class App extends Component {
     db;
