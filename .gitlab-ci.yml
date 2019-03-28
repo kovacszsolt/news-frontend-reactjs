@@ -19,6 +19,6 @@ create:
     - ls -l
     - echo $CI_PROJECT_DIR
     - echo $CI_PROJECT_NAME
-    - echo ${CI_REGISTRY_IMAGE}
+    - echo "${CI_REGISTRY_IMAGE}:latest"
   only:
     - master
