@@ -1,6 +1,6 @@
 {
   "name": "news-frontend-reactjs",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "react": "^16.8.4",
@@ -15,8 +15,8 @@
     "start:itcrowdhu": "env-cmd .env.itcrowdhu react-scripts start",
     "start:itnewscloud": "env-cmd .env.itnewscloud react-scripts start",
     "build": "react-scripts build",
-    "build:itcrowdhu": "env-cmd .env.itcrowdhu react-scripts build  && mv build itcrowdhu",
-    "build:itnewscloud": "env-cmd .env.itnewscloud react-scripts build",
+    "build:itcrowdhu": "env-cmd .env.itcrowdhu react-scripts build  && mv build build_itcrowdhu",
+    "build:itnewscloud": "env-cmd .env.itnewscloud react-scripts build  && mv build build_itnewscloud",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
