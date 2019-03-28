@@ -31,8 +31,8 @@ create:
     - echo $CI_PROJECT_DIR
     - echo $CI_PROJECT_NAME
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker build --pull -t "${CI_REGISTRY_IMAGE}:itcrowdhu" -f Dockerfile.itcrowdhu
-    - docker build --pull -t "${CI_REGISTRY_IMAGE}:itnewscloud" -f Dockerfile.itnewscloud
+    - docker build --pull -t "${CI_REGISTRY_IMAGE}:itcrowdhu" -f Dockerfile.itcrowdhu .
+    - docker build --pull -t "${CI_REGISTRY_IMAGE}:itnewscloud" -f Dockerfile.itnewscloud .
     - docker push "${CI_REGISTRY_IMAGE}:itcrowdhu"
     - docker push "${CI_REGISTRY_IMAGE}:itnewscloud"
   only:
