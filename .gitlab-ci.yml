@@ -1,7 +1,7 @@
 cache:
   paths:
-    - bulid_itcrowdhu/
-    - bulid_itnewscloud/
+    - build_itcrowdhu/
+    - build_itnewscloud/
 stages:
   - build
   - release
