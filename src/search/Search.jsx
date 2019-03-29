@@ -36,7 +36,7 @@ class AppSearch extends Component {
     }
 
     componentDidMount() {
-            this.initIndexedDB();
+        this.initIndexedDB();
     };
 
     handleChange = (event) => {
@@ -54,11 +54,7 @@ class AppSearch extends Component {
 
     search = (searchText) => {
         if (searchText.length > 2) {
-            if (Util.isWebSQL()) {
-                this.searchWebSQL(searchText);
-            } else {
-                this.searchIndexedDB(searchText);
-            }
+            this.searchIndexedDB(searchText);
             window.history.pushState({}, "another page", '/search/' + searchText);
         } else {
             this.setState({tweets: []});

@@ -59,12 +59,12 @@ class AppTweet extends Component {
                         <meta property="og:title" content={this.state.tweet.title}/>
                         <meta property="og:description" content={this.state.tweet.description}/>
                         <meta property="og:image"
-                              content={'https://itcrowd.hu/image/size1/' + this.state.tweet.slug + "/size2.jpg"}/>
+                              content={process.env.REACT_APP_IMAGE_URL + '/size1/' + this.state.tweet.slug + "/size2.jpg"}/>
                     </Helmet>
 
                     <div className="tweet">
                         <img className="tweet__image" alt={this.state.tweet.title}
-                             src={'https://itcrowd.hu/image/size1/' + this.state.tweet.slug + "." + this.state.tweet.extension}/>
+                             src={process.env.REACT_APP_IMAGE_URL+'/size1/' + this.state.tweet.slug + "." + this.state.tweet.extension}/>
                         <h1>{this.state.tweet.title}</h1>
                         <p>{this.state.tweet.description}</p>
                         <div className="tweet__link">
