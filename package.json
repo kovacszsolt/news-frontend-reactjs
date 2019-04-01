@@ -14,6 +14,7 @@
     "start": "env-cmd .env.itcrowdhu react-scripts start",
     "start:itcrowdhu": "env-cmd .env.itcrowdhu react-scripts start",
     "start:itnewscloud": "env-cmd .env.itnewscloud react-scripts start",
+    "start:itnewscloud.localhost": "env-cmd .env.itnewscloud.localhost react-scripts start",
     "build": "react-scripts build",
     "build:itcrowdhu": "env-cmd .env.itcrowdhu react-scripts build  && mv build build_itcrowdhu",
     "build:itnewscloud": "env-cmd .env.itnewscloud react-scripts build  && mv build build_itnewscloud",
