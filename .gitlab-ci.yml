@@ -1,7 +1,8 @@
 cache:
   paths:
-    - build_itcrowdhu/
-    - build_itnewscloud/
+    - build/
+    - build/itcrowdhu/
+    - build/itnewscloud/
 stages:
   - build
   - release
@@ -12,7 +13,6 @@ build:
   stage: build
   script:
     - npm install
-    - npm i env-cmd -g
     - npm run build:itcrowdhu
     - npm run build:itnewscloud
   only:

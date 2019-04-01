@@ -1,63 +1,33 @@
-.app__center {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.App {
+  text-align: center;
 }
 
-.app__center span {
-    font-size: 10rem;
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
 }
 
-a {
-    text-decoration: none;
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-
-.common__tags a {
-    color: var(--common-a-border-color);
-    margin-right: 1rem;
-    border-bottom: 1px solid var(--common-a-border-color);
+.App-link {
+  color: #61dafb;
 }
 
-.padding__left-05 {
-    padding-left: 0.5rem !important;
-}
-
-.padding__left-2 {
-    padding-left: 2rem !important;
-}
-
-
-.app__overlay {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    visibility: visible;
-    opacity: 1;
-}
-
-.app__overlay__popup {
-    padding: 1rem;
-    margin: auto;
-    background: #fff;
-    border-radius: 5px;
-    width: 30%;
-    position: relative;
-}
-
-.app__overlay__popup__footer {
-    text-align: right;
-}
-
-.app__overlay__popup__footer button {
-    padding: 0.5rem;
-    border: 0.2rem solid var(--popup-footer-button-border-color);
-    color: var(--popup-footer-button-color);
-    text-transform: uppercase;
-    font-weight: 700;
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
