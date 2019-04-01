@@ -12,6 +12,7 @@ build:
   stage: build
   script:
     - npm install
+    - npm i env-cmd -g
     - npm run build:itcrowdhu
     - npm run build:itnewscloud
   only:
