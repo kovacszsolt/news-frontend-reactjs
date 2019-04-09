@@ -3,7 +3,7 @@ class ServicesIndexedDB {
     static createDatabase = () => {
         return new Promise((resolve, reject) => {
 
-            const dbRequest = indexedDB.open('news', 1);
+            const dbRequest = indexedDB.open(process.env.REACT_APP_DATABASE, 1);
             dbRequest.onupgradeneeded = (event) => {
                 const db = event.target.result;
                 if (!db.objectStoreNames.contains('news')) {

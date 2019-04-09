@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-console.log(process.env);
 document.getElementsByTagName("head")[0].insertAdjacentHTML(
     "afterbegin",
     "<link rel=\"stylesheet\" href=\"/" + process.env.REACT_APP_SCHEMA_CSS + "\" />");

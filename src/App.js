@@ -27,12 +27,12 @@ class App extends Component {
     ServicesIndexedDB.createDatabase().then((db) => {
       this.db = db;
       ServicesIndexedDB.getRecordount(db).then((recordCount) => {
-        const updateKey = localStorage.getItem('UPDATEKEY');
+        const updateKey = localStorage.getItem(process.env.REACT_APP_UPDATEKEY);
         ServicesRemote.getUpdate().then((updateRecords) => {
           if (String(updateRecords.lastAddDate) !== updateKey) {
             console.log('db update');
             this.initIndexedDBData();
-            localStorage.setItem('UPDATEKEY', updateRecords.lastAddDate);
+            localStorage.setItem(process.env.REACT_APP_UPDATEKEY, updateRecords.lastAddDate);
           } else {
             console.log('db no update');
             this.setState({isLoading: false});
