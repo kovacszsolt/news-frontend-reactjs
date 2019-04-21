@@ -42,3 +42,10 @@
 .common__card__image {
     width: 100%;
 }
+
+.common__card__content__title__new {
+    background-image: linear-gradient(red, blue);
+    color: transparent;
+    -webkit-background-clip: text;
+    margin-right: 0.5rem;
+}
