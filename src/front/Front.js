@@ -13,7 +13,8 @@ class AppFront extends Component {
         super(props);
         this.state = {
             pagesize: 9,
-            tweets: []
+            tweets: [],
+            storeObject: {}
         }
     };
 
@@ -52,7 +53,7 @@ class AppFront extends Component {
         ServicesIndexedDB.getRecordPage(storeObject, this.currentPage * this.state.pagesize, ((this.currentPage + 1) * this.state.pagesize) - 1).then((records) => {
             const tmp = this.state.tweets;
             tmp.push(...records);
-            this.setState({tweets: tmp});
+            this.setState({tweets: tmp, storeObject: storeObject});
             this.currentPage++;
             document.addEventListener('scroll', this.trackScrolling);
         });
@@ -75,8 +76,12 @@ class AppFront extends Component {
                 <div className="front__content" id={"content"}>
                     {this.state.tweets.map((record) => {
                         return (
-                            <AppCommonCard id={record.id} key={record.id} title={record.title}
+                            <AppCommonCard id={record.id}
+                                           storeObject={this.state.storeObject}
+                                           key={record.id}
+                                           title={record.title}
                                            slug={record.slug}
+                                           new={record.new}
                                            extension={record.extension}
                                            date={record.createtime}
                                            tags={Util.getTags(record.tags)} text={record.description}></AppCommonCard>

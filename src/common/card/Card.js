@@ -1,8 +1,12 @@
 import React from 'react';
 import './Card.css';
 import {Link} from "react-router-dom";
+import ServicesIndexedDB from "../../services/Services.indexeddb";
 
 const AppCommonCard = (props) => {
+    if (props.new === 1) {
+        ServicesIndexedDB.setNew(props.storeObject, props.slug, 0);
+    }
     return (
         <div className="common__card">
 

@@ -23,6 +23,28 @@ class ServicesIndexedDB {
         });
     };
 
+//
+    static setNew = (storeObject, id, newState) => {
+        const objectStoreTitleRequest = storeObject.index('slug').get(id);
+        objectStoreTitleRequest.onsuccess = () => {
+            const data = objectStoreTitleRequest.result;
+            data.new = 0;
+            console.log('data',data);
+            /*
+            const updateRequest = storeObject.put(data);
+            updateRequest.onsuccess = () => {
+                console.log('success');
+            };
+             */
+        }
+        /*
+        add.onsuccess = (addResult) => {
+            if (addResult.type === 'success') {
+                resolve(record._id);
+            }
+        }
+         */
+    }
 
     static getRecordount = (db) => {
         return new Promise((resolve, reject) => {
