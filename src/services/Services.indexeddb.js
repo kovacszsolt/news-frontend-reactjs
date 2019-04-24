@@ -2,7 +2,6 @@ class ServicesIndexedDB {
 
     static createDatabase = () => {
         return new Promise((resolve, reject) => {
-
             const dbRequest = indexedDB.open(process.env.REACT_APP_DATABASE, 1);
             dbRequest.onupgradeneeded = (event) => {
                 const db = event.target.result;
@@ -23,27 +22,17 @@ class ServicesIndexedDB {
         });
     };
 
-//
-    static setNew = (storeObject, id, newState) => {
-        const objectStoreTitleRequest = storeObject.index('slug').get(id);
-        objectStoreTitleRequest.onsuccess = () => {
-            const data = objectStoreTitleRequest.result;
-            data.new = 0;
-            console.log('data',data);
-            /*
-            const updateRequest = storeObject.put(data);
-            updateRequest.onsuccess = () => {
-                console.log('success');
-            };
-             */
-        }
-        /*
-        add.onsuccess = (addResult) => {
-            if (addResult.type === 'success') {
-                resolve(record._id);
+    static setNew = (storeObject, id) => {
+        const cursorRequest = storeObject.index('slug').openCursor(IDBKeyRange.only(id));
+        cursorRequest.onsuccess = e => {
+            const cursor = e.target.result;
+            if (cursor) {
+                const cursorValue = cursor.value;
+                cursorValue.new = 0;
+                const updateRequest = cursor.update(cursorValue);
+                cursor.continue();
             }
         }
-         */
     }
 
     static getRecordount = (db) => {
@@ -75,7 +64,7 @@ class ServicesIndexedDB {
             const keyRangeValue = IDBKeyRange.bound(startPos, endPos);
             const items = [];
             storeObject.openCursor(keyRangeValue).onsuccess = (event) => {
-                var cursor = event.target.result;
+                const cursor = event.target.result;
                 if (cursor) {
                     items.push(cursor.value);
                     cursor.continue();

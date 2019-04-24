@@ -30,6 +30,11 @@
     flex-wrap: wrap;
 }
 
+.common__card__content__tags a {
+    margin-right: 0.5rem;
+    color: var(--tweet-a);
+}
+
 
 .common__card__content__text {
     display: -webkit-box;

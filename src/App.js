@@ -29,8 +29,6 @@ class App extends Component {
             ServicesIndexedDB.getRecordount(db).then((recordCount) => {
                 const updateKey = localStorage.getItem(process.env.REACT_APP_UPDATEKEY);
                 ServicesRemote.getUpdate().then((updateRecords) => {
-                    console.log('updateRecords', updateRecords);
-                    console.log('updateKey', updateKey);
                     if ((updateKey === null) || (updateRecords['lastAddDate'] !== updateKey['lastAddDate'])) {
 
                         console.log('db update');
