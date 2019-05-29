@@ -29,7 +29,7 @@ class ServicesIndexedDB {
             if (cursor) {
                 const cursorValue = cursor.value;
                 cursorValue.new = 0;
-                const updateRequest = cursor.update(cursorValue);
+                cursor.update(cursorValue);
                 cursor.continue();
             }
         }
