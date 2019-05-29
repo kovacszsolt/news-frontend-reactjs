@@ -28,7 +28,7 @@ create:
   before_script:
     - docker info
   script:
-    - echo "$REGISTRY_PASSWORD" |  docker login -u $REGISTRY_USERNAME -p --password-stdin
+    - echo "$REGISTRY_PASSWORD" |  docker login -u $REGISTRY_USERNAME --password-stdin
     - docker build --pull -t "${REGISTRY_IMAGE}:itcrowdhu" -f Dockerfile.itcrowdhu .
     - docker build --pull -t "${REGISTRY_IMAGE}:itnewscloud" -f Dockerfile.itnewscloud .
     - docker push "${REGISTRY_IMAGE}:itcrowdhu"
