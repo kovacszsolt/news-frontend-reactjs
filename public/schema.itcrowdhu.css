@@ -1,8 +1,13 @@
+
 :root {
+    --background-color: white;
+
     --card-border-color: var(--color-blue-20);
 
     --common-a-color: var(--color-blue-50);
     --common-a-border-color: var(--color-blue-50);
+
+    --common-card-title: var(--color-black);
 
     --popup-footer-button-color: var(--color-blue-70);
     --popup-footer-button-border-color: var(--color-blue-50);
@@ -16,4 +21,16 @@
     --search-header-input-border-color: var(--color-blue-70);
     --search-list-item-border-color:  var(--color-blue-70);
     --search-list-item-title-color:  var(--color-blue-50);
+
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: var(--color-gray-80);
+        --common-card-title: var(--color-white);
+        --header-background-color: var(--color-blue-90);
+        --card-border-color: var(--color-blue-80);
+        --tweet-a: var(--color-blue-20);
+
+    }
 }

@@ -112,7 +112,7 @@ class App extends Component {
                     <Router>
                         <Fragment>
                             <AppCommonHeader/>
-                            <div className="w-100 p-3">
+                            <div className="w-100 p-3 root">
                                 <Switch>
                                     <Route path="/" exact component={AppFront}/>
                                     <Route path="/notfound" exact component={AppNotfound}/>

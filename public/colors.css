@@ -1,11 +1,20 @@
 :root {
+    --color-white: #ffffff;
+
     --color-blue-10: #C0E6FF;
     --color-blue-20: #7CC7FF;
+    --color-blue-30: #5AAAFA;
+    --color-blue-40: #5596E6;
     --color-blue-50: #4178BE;
     --color-blue-70: #264A60;
+    --color-blue-80: #1d3458;
+    --color-blue-90: #152935;
 
     --color-purple-10: #efcef3;
     --color-purple-20: #e4adea;
-    --color-purple-50: #c22dd5;
-    --color-purple-50: #71237c;
+    --color-purple-50: #9855D4;
+
+    --color-gray-80: #343334;
+
+    --color-black: #000000;
 }
